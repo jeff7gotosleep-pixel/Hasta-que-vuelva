@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contador hasta el sábado<br>Que vuelve azaroth</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+
+      /* 🔧 CAMBIAR IMAGEN DE FONDO AQUÍ */
+      background-image: url('https://media.istockphoto.com/id/1042598890/es/foto/hachiko-el-perro-est%C3%A1-esperando-kuan-bin-provincia-vietnam.jpg?s=170667a&w=0&k=20&c=2xOOE_N44bzXCV9X8Q2ruPMLIZz4JOCZa2b4M5jb6Vg=');
+      background-size: cover;
+      background-position: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    #contador {
+      font-size: 2em;
+      background: rgba(0,0,0,0.5);
+      padding: 15px 25px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔧 CAMBIAR TEXTO DEL ENCABEZADO AQUÍ -->
+  <h1>Cuenta regresiva hasta el sábado</h1>
+
+  <div id="contador">Calculando...</div>
+
+  <script>
+    function obtenerProximoSabado() {
+      const ahora = new Date();
+      const diaActual = ahora.getDay(); // 0=Domingo, 6=Sábado
+
+      let diasRestantes = 6 - diaActual;
+      if (diasRestantes <= 0) {
+        diasRestantes += 7; // Si hoy es sábado o después, ir al próximo
+      }
+
+      const proximoSabado = new Date(ahora);
+      proximoSabado.setDate(ahora.getDate() + diasRestantes);
+      proximoSabado.setHours(0, 0, 0, 0); // Medianoche
+
+      return proximoSabado;
+    }
+
+    const fechaObjetivo = obtenerProximoSabado();
+
+    function actualizarContador() {
+      const ahora = new Date();
+      const diferencia = fechaObjetivo - ahora;
+
+      if (diferencia <= 0) {
+        document.getElementById("contador").innerHTML = "¡Ya es sábado!";
+        return;
+      }
+
+      const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diferencia / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diferencia / (1000 * 60)) % 60);
+      const segundos = Math.floor((diferencia / 1000) % 60);
+
+      document.getElementById("contador").innerHTML =
+        `${dias} días ${horas} horas ${minutos} minutos ${segundos} segundos`;
+    }
+
+    setInterval(actualizarContador, 1000);
+    actualizarContador();
+  </script>
+
+</body>
+</html>
+```
