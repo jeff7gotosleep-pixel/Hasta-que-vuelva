@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,7 +16,6 @@
       font-family: Arial, sans-serif;
       text-align: center;
 
-      /* 🔧 CAMBIAR IMAGEN DE FONDO AQUÍ */
       background-image: url('https://media.istockphoto.com/id/1042598890/es/foto/hachiko-el-perro-est%C3%A1-esperando-kuan-bin-provincia-vietnam.jpg?s=170667a&w=0&k=20&c=2xOOE_N44bzXCV9X8Q2ruPMLIZz4JOCZa2b4M5jb6Vg=');
       background-size: cover;
       background-position: center;
@@ -44,17 +44,20 @@
   <div id="contador">Calculando...</div>
 
   <script>
+    function ahoraLocal() {
+      return new Date(); // usa hora del navegador automáticamente
+    }
+
     function obtenerFechaObjetivo() {
-      const ahora = new Date();
+      const ahora = ahoraLocal();
       const diaActual = ahora.getDay(); // 0=Domingo, 6=Sábado
 
       let fechaObjetivo = new Date(ahora);
 
       if (diaActual === 6) {
-        // 🔥 Si es sábado → fin del día
+        // Sábado → fin del día local
         fechaObjetivo.setHours(23, 59, 59, 999);
       } else {
-        // ⏳ Próximo sábado a las 00:00
         let diasRestantes = 6 - diaActual;
         if (diasRestantes < 0) diasRestantes += 7;
 
@@ -65,13 +68,11 @@
       return fechaObjetivo;
     }
 
-    let fechaObjetivo = obtenerFechaObjetivo();
-
     function actualizarContador() {
-      const ahora = new Date();
-      fechaObjetivo = obtenerFechaObjetivo(); // 🔄 se recalcula siempre
+      const ahora = ahoraLocal();
+      const fechaObjetivo = obtenerFechaObjetivo();
 
-      const diferencia = fechaObjetivo - ahora;
+      const diferencia = fechaObjetivo.getTime() - ahora.getTime();
       const diaActual = ahora.getDay();
 
       let mensajeExtra = "";
