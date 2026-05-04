@@ -39,36 +39,52 @@
 </head>
 <body>
 
-  <!-- 🔧 CAMBIAR TEXTO DEL ENCABEZADO AQUÍ -->
   <h1>Cuenta regresiva hasta el sábado</h1>
 
   <div id="contador">Calculando...</div>
 
   <script>
-    function obtenerProximoSabado() {
+    function obtenerFechaObjetivo() {
       const ahora = new Date();
       const diaActual = ahora.getDay(); // 0=Domingo, 6=Sábado
 
-      let diasRestantes = 6 - diaActual;
-      if (diasRestantes <= 0) {
-        diasRestantes += 7; // Si hoy es sábado o después, ir al próximo
+      let fechaObjetivo = new Date(ahora);
+
+      if (diaActual === 6) {
+        // 🔥 Si es sábado → fin del día
+        fechaObjetivo.setHours(23, 59, 59, 999);
+      } else {
+        // ⏳ Próximo sábado a las 00:00
+        let diasRestantes = 6 - diaActual;
+        if (diasRestantes < 0) diasRestantes += 7;
+
+        fechaObjetivo.setDate(ahora.getDate() + diasRestantes);
+        fechaObjetivo.setHours(0, 0, 0, 0);
       }
 
-      const proximoSabado = new Date(ahora);
-      proximoSabado.setDate(ahora.getDate() + diasRestantes);
-      proximoSabado.setHours(0, 0, 0, 0); // Medianoche
-
-      return proximoSabado;
+      return fechaObjetivo;
     }
 
-    const fechaObjetivo = obtenerProximoSabado();
+    let fechaObjetivo = obtenerFechaObjetivo();
 
     function actualizarContador() {
       const ahora = new Date();
+      fechaObjetivo = obtenerFechaObjetivo(); // 🔄 se recalcula siempre
+
       const diferencia = fechaObjetivo - ahora;
+      const diaActual = ahora.getDay();
+
+      let mensajeExtra = "";
+
+      if (diaActual === 6) {
+        mensajeExtra = "<br><small>vuelve en algun momento de hoy</small>";
+      }
 
       if (diferencia <= 0) {
-        document.getElementById("contador").innerHTML = "¡Ya es sábado!";
+        document.getElementById("contador").innerHTML =
+          diaActual === 6
+            ? "Hoy es sábado 🎉" + mensajeExtra
+            : "¡Ya es sábado!";
         return;
       }
 
@@ -78,7 +94,7 @@
       const segundos = Math.floor((diferencia / 1000) % 60);
 
       document.getElementById("contador").innerHTML =
-        `${dias} días ${horas} horas ${minutos} minutos ${segundos} segundos`;
+        `${dias} días ${horas} horas ${minutos} minutos ${segundos} segundos` + mensajeExtra;
     }
 
     setInterval(actualizarContador, 1000);
@@ -87,4 +103,3 @@
 
 </body>
 </html>
-```
